@@ -11,31 +11,42 @@
 #set page(
   // This is the 16:9 ratio
   width: 1920pt,
-  height: 1090pt,
+  height: 1090pt, // Technically it's 1080, but 1090 leaves no gaps
 
   // Shows up as white, but is "transparent" when printing (uses no ink)
   fill: none,
 
   // Numbering the pages
-  numbering: "1",
+  //numbering: "1",
+  footer: [
+    #set align(right)
+
+    #set text(
+      font: "Libertinus Serif",
+      style: "normal",
+      fill: black,
+      size: 48pt,
+      weight: "regular",
+    )
+
+    #place(
+      right,
+      dx: 5%,
+      dy: -50pt,
+      context [
+        #counter(page).display(
+          "1/1",
+          both: true,
+        )
+      ]
+    )
+  ],
 
   margin: (
-    y: 2.0cm
+    y: 2.0cm,
   )
 )
 
-#let normalize() = {
-  // Normalizes the style
-  set par(justify: true)
-  set align(left)
-
-  set text(
-    font: "Libertinus Serif",
-    style: "normal",
-    size: 11pt,
-  )
-}
-#normalize()
 
 #let title_slide(title, subtitle: none, author: none) = {
   let _title = {
@@ -182,6 +193,104 @@
   )
 }
 
+#let double_text_slide(title, body1, body2) = {
+  let _title = {
+    set text(
+      size: 64pt,
+      font: "arial",
+      fill: white,
+      weight: "bold",
+    )
+
+    set align(center)
+
+    block(
+      width: 100%,
+      height: 100%,
+      radius: 10%,
+      inset: 20pt,
+      fill: rgb("#0074d9"),
+
+      align(horizon + left)[
+        #grid(
+          columns: (2%, 98%),
+          none,
+          align(horizon + left)[#par(leading:0.3em)[#title]]
+        )
+      ]
+    )
+  }
+
+  let _body1 = {
+    set text(
+      size: 48pt,
+      font: "arial",
+      fill: black,
+    )
+
+    set align(left)
+
+    grid(
+      columns: (2%, 98%),
+      none,
+      body1,
+    )
+  }
+
+  let _body2 = {
+    set text(
+      size: 48pt,
+      font: "arial",
+      fill: black,
+    )
+
+    set align(left)
+
+    grid(
+      columns: (2%, 98%),
+      none,
+      body2,
+    )
+  }
+  set align(top)
+  grid(
+    rows: (20%, 70%),
+    row-gutter: 5%,
+    //stroke: 5pt,
+    _title,
+    grid(
+      columns: 2,
+      _body1,
+      _body2,
+    ),
+  )
+}
+
+#let section_slide(title) = {
+  let _title = {
+    set text(
+      size: 64pt,
+      font: "arial",
+      fill: white,
+      weight: "bold",
+    )
+
+    set align(horizon + center)
+
+    block(
+      width: 100%,
+      height: 30%,
+      radius: 10%,
+      inset: 20pt,
+      fill: rgb("#0074d9"),
+
+      align(horizon + center)[#par(leading:0.3em)[#title]]
+    )
+  }
+
+  _title
+}
+
 #title_slide(
   "PID controllers",
   subtitle: "A short, concise, subtitle",
@@ -193,6 +302,18 @@
 #text_slide(
   "Random CS jabber",
   lorem(100),
+)
+
+#pagebreak()
+
+#section_slide("BBLs and other interests")
+
+#pagebreak()
+
+#double_text_slide(
+  "Thingy majigy",
+  lorem(50),
+  lorem(50),
 )
 
 #text_slide(
@@ -214,3 +335,12 @@
   subtitle: "A very cool thing that I am building. It takes a very large subtitle comment to explain exactly",
   author: "Emmet Spaeth and Spaeth Emmet",
 )
+
+#pagebreak()
+
+#double_text_slide(
+  "Thingy majigy",
+  lorem(50),
+  lorem(50),
+)
+
